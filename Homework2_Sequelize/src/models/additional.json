@@ -1,3 +1,5 @@
 {
-  "timestamps": false
+  "timestamps": true,
+  "underscored": true,
+  "paranoid": false
 }

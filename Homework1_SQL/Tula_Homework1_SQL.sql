@@ -100,8 +100,11 @@ CREATE TABLE `rate_res` (
 	`deleted_at` TIMESTAMP NULL DEFAULT NULL,
 	`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	`is_deleted` BOOLEAN NOT NULL DEFAULT FALSE,
-	`deleted_by` INT NOT NULL DEFAULT 0
+	`deleted_by` INT NOT NULL DEFAULT 0,
+	`comment` TEXT DEFAULT NULL,
+	UNIQUE (`user_id`, `res_id`)
 )
+
 
 --Table like_res
 CREATE TABLE `like_res` (
@@ -117,6 +120,8 @@ CREATE TABLE `like_res` (
 	`is_deleted` BOOLEAN NOT NULL DEFAULT FALSE,
 	`deleted_by` INT NOT NULL DEFAULT 0
 )
+
+DELETE FROM `like_res` WHERE `user_id` = 1 AND `res_id` = 3;
 
 
 --------------------------------------------Insert Sample Data For DB Section-------------------------------------------------------------------------
