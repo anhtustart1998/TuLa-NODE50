@@ -72,21 +72,36 @@ CREATE TABLE `sub_food` (
 
 -- TABLE order
 CREATE TABLE `order` (
-	`order_id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	`user_id` INT NOT NULL,
-	FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-	`food_id` INT NOT NULL,
-	FOREIGN KEY (`food_id`) REFERENCES `food` (`food_id`),
-	`amount` INT,
-	`code` VARCHAR(255),
-	`arr_sub_id` VARCHAR(255),
+    `order_id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+    `food_id` INT NOT NULL,
+    FOREIGN KEY (`food_id`) REFERENCES `food` (`food_id`),
+    `amount` INT NOT NULL DEFAULT 1, 
+    `code` VARCHAR(255),
+    `status` ENUM('pending', 'completed', 'canceled', 'failed') NOT NULL DEFAULT 'pending',
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT FALSE,
+    `deleted_by` INT NOT NULL DEFAULT 0
+);
+
+-- TABLE order_sub_food
+CREATE TABLE `order_sub_food` (
+	`order_sub_food_id` INT PRIMARY KEY AUTO_INCREMENT,
+	`order_id` INT NOT NULL,
+	FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
+	`sub_id` INT NOT NULL,
+	FOREIGN KEY (`sub_id`) REFERENCES `sub_food` (`sub_id`),
+	UNIQUE (`order_id`, `sub_id`),
 	`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`deleted_at` TIMESTAMP NULL DEFAULT NULL,
 	`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	`is_deleted` BOOLEAN NOT NULL DEFAULT FALSE,
 	`deleted_by` INT NOT NULL DEFAULT 0
+	
 )
-
 
 -- TABLE rate_res
 CREATE TABLE `rate_res` (
@@ -178,22 +193,47 @@ INSERT INTO `sub_food` (`food_id`, `sub_name`, `sub_price`) VALUES
 
 
 INSERT INTO `order` (`user_id`, `food_id`, `amount`, `code`, `arr_sub_id`) VALUES 
-(1, 3, 1, 'ORDER001', '[]'),
-(2, 5, 2, 'ORDER002', '[5]'),
-(3, 8, 1, 'ORDER003', '[6,7]'),
-(4, 1, 1, 'ORDER004', '[1,2]'),
-(5, 9, 2, 'ORDER005', '[8]'),
-(6, 4, 3, 'ORDER006', '[4]'),
-(7, 2, 1, 'ORDER007', '[3]'),
-(8, 7, 2, 'ORDER008', '[]'),
-(1, 1, 2, 'ORDER009', '[1]'),
-(1, 4, 1, 'ORDER010', '[4]'),
-(3, 5, 1, 'ORDER011', '[5]'),
-(3, 2, 2, 'ORDER012', '[3]'),       
-(3, 9, 4, 'ORDER013', '[8]'),
-(5, 3, 1, 'ORDER014', '[]'),
-(5, 7, 2, 'ORDER015', '[]'),
-(5, 10, 3, 'ORDER016', '[]');  
+(1, 3, 1, 'ORDER001'),
+(2, 5, 2, 'ORDER002'),
+(3, 8, 1, 'ORDER003'),
+(4, 1, 1, 'ORDER004'),
+(5, 9, 2, 'ORDER005'),
+(6, 4, 3, 'ORDER006'),
+(7, 2, 1, 'ORDER007'),
+(8, 7, 2, 'ORDER008'),
+(1, 1, 2, 'ORDER009'),
+(1, 4, 1, 'ORDER010'),
+(3, 5, 1, 'ORDER011'),
+(3, 2, 2, 'ORDER012'),       
+(3, 9, 4, 'ORDER013'),
+(5, 3, 1, 'ORDER014'),
+(5, 7, 2, 'ORDER015'),
+(5, 10, 3, 'ORDER016');  
+
+INSERT INTO `order_sub_food` (`order_id`, `sub_id`, `is_deleted`) VALUES
+(2, 5, FALSE);
+INSERT INTO `order_sub_food` (`order_id`, `sub_id`, `is_deleted`) VALUES
+(3, 6, FALSE),
+(3, 7, FALSE);
+INSERT INTO `order_sub_food` (`order_id`, `sub_id`, `is_deleted`) VALUES
+(4, 1, FALSE),
+(4, 2, FALSE);
+INSERT INTO `order_sub_food` (`order_id`, `sub_id`, `is_deleted`) VALUES
+(5, 8, FALSE);
+INSERT INTO `order_sub_food` (`order_id`, `sub_id`, `is_deleted`) VALUES
+(6, 4, FALSE);
+INSERT INTO `order_sub_food` (`order_id`, `sub_id`, `is_deleted`) VALUES
+(7, 3, FALSE);
+INSERT INTO `order_sub_food` (`order_id`, `sub_id`, `is_deleted`) VALUES
+(9, 1, FALSE);
+INSERT INTO `order_sub_food` (`order_id`, `sub_id`, `is_deleted`) VALUES
+(10, 4, FALSE);
+INSERT INTO `order_sub_food` (`order_id`, `sub_id`, `is_deleted`) VALUES
+(11, 5, FALSE);
+INSERT INTO `order_sub_food` (`order_id`, `sub_id`, `is_deleted`) VALUES
+(12, 3, FALSE);
+INSERT INTO `order_sub_food` (`order_id`, `sub_id`, `is_deleted`) VALUES
+(13, 8, FALSE);
 
 
 INSERT INTO `rate_res` (`user_id`, `res_id`, `amount`) VALUES
