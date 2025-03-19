@@ -1,39 +1,30 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class order extends Model {
+export default class order_sub_food extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
-    order_id: {
+    order_sub_food_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    user_id: {
+    order_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'user',
-        key: 'user_id'
+        model: 'order',
+        key: 'order_id'
       }
     },
-    food_id: {
+    sub_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'food',
-        key: 'food_id'
+        model: 'sub_food',
+        key: 'sub_id'
       }
-    },
-    amount: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 1
-    },
-    code: {
-      type: DataTypes.STRING(255),
-      allowNull: true
     },
     deleted_at: {
       type: DataTypes.DATE,
@@ -48,15 +39,10 @@ export default class order extends Model {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0
-    },
-    status: {
-      type: DataTypes.ENUM('pending','completed','canceled','failed'),
-      allowNull: false,
-      defaultValue: "pending"
     }
   }, {
     sequelize,
-    tableName: 'order',
+    tableName: 'order_sub_food',
     timestamps: true,
     underscored: true,
     indexes: [
@@ -65,21 +51,23 @@ export default class order extends Model {
         unique: true,
         using: "BTREE",
         fields: [
+          { name: "order_sub_food_id" },
+        ]
+      },
+      {
+        name: "order_id",
+        unique: true,
+        using: "BTREE",
+        fields: [
           { name: "order_id" },
+          { name: "sub_id" },
         ]
       },
       {
-        name: "user_id",
+        name: "sub_id",
         using: "BTREE",
         fields: [
-          { name: "user_id" },
-        ]
-      },
-      {
-        name: "food_id",
-        using: "BTREE",
-        fields: [
-          { name: "food_id" },
+          { name: "sub_id" },
         ]
       },
     ]
